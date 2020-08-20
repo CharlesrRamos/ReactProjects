@@ -19,7 +19,41 @@ export default class Calculator extends Component {
   }
 
   setOperation(operation) {
-    console.log(operation);
+    if (this.state.current === 0) {
+      this.setState({ operation, current: 1, clearDisplay: true });
+    } else {
+      const equals = operation === "=";
+      const currentOperation = this.state.operation;
+
+      const values = [...this.state.values];
+
+      switch (currentOperation) {
+        case "/":
+          values[0] /= values[1];
+          break;
+        case "+":
+          values[0] += values[1];
+          break;
+        case "-":
+          values[0] -= values[1];
+          break;
+        case "*":
+          values[0] *= values[1];
+          break;
+
+        default:
+      }
+
+     values[1]=0
+
+      this.setState({
+        displayValue:values[0],
+        operation:equals ? null: operation,
+        current: equals ? 0 : 1,
+        clearDisplay: !equals,
+        values
+      })
+    }
   }
 
   addDigital(n) {
@@ -36,9 +70,11 @@ export default class Calculator extends Component {
     if (n !== ".") {
       const i = this.state.current;
       const newValue = parseFloat(displayValue);
-      const values = [...this.state.value];
-      values[1] = newValue;
+      const values = [...this.state.values];
+      values[i] = newValue;
       this.setState({ values });
+
+      console.log(values);
     }
   }
 
